@@ -1,0 +1,4 @@
+<h1> The hash </h1>
+
+[% USE Dumper %]
+[% Dumper.dump(hash) %]
