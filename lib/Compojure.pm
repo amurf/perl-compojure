@@ -15,14 +15,21 @@ use Template;
 #XXX: keeps track of routes..
 my %routes;
 
+#TODO: Mimic this for rest apps, applying default middleware
 fun app(@routes) {
     my %combined_routes;
+
+    # defaults, make extendable.. ?
+    my @middleware = 'CGIExpand';
 
     for my $route (@routes) {
         @combined_routes{keys %$route} = values %$route;
     }
 
-    return Compojure::App->new(routes => \%combined_routes)->to_app;
+    return Compojure::App->new(
+        routes     => \%combined_routes,
+        middleware => \@middleware,
+    )->to_app;
 }
 
 fun add_handler($type, $path, $func) {
