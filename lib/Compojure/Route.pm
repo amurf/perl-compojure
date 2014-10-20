@@ -20,8 +20,8 @@ has PUT => (
 
 method call($env) {
     my $method = $env->{REQUEST_METHOD};
+    my $body   = $self->$method->(Plack::Request->new($env));
 
-    my $body = $self->$method->( Plack::Request->new($env) );
     return Compojure::Response->render($body);
 }
 
