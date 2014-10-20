@@ -1,19 +1,25 @@
 package Compojure::App;
 use Moo;
 use Function::Parameters qw(:strict);
-
 use Plack::Builder;
-use Plack::App::URLMap;
 
 has routes => (
     is => 'ro',
 );
 
+has middleware => (
+    is      => 'ro',
+);
+
 method to_app {
     my $routes = $self->routes;
-    my $app    = Plack::App::URLMap->new;
+    my $app    = Plack::Builder->new;
 
-    for my $route ( keys %{$routes} ) {
+    for my $mw (@{$self->middleware}) {
+        $app->add_middleware('CGIExpand');
+    }
+
+    for my $route (keys %{$routes}) {
         $app->mount($route => $routes->{$route}->to_app);
     }
 
