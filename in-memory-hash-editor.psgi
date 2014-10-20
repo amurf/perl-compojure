@@ -1,5 +1,6 @@
 use Compojure;
 use Function::Parameters qw(:strict);
+use Plack::Builder;
 
 my %editable_hash = (
     one => 'two',
@@ -28,7 +29,7 @@ fun view_hash($req) {
 
 my $app_routes = routes(
     get('/view_hash' => \&view_hash),
-    post('/edit_hash' => \&edit_hash),
+    get('/edit_hash' => \&edit_hash),
 );
 
 app($app_routes);
