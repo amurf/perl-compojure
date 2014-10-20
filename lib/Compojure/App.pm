@@ -11,16 +11,13 @@ has routes => (
 
 method to_app {
     my $routes = $self->routes;
+    my $app    = Plack::App::URLMap->new;
 
-    return builder {
-        enable 'CGIExpand';
-
-        for my $route ( keys %{$routes} ) {
-            mount $route => $routes->{$route}->to_app;
-        }
-
-        mount "/" => sub {};
+    for my $route ( keys %{$routes} ) {
+        $app->mount($route => $routes->{$route}->to_app);
     }
+
+    return $app->to_app;
 }
 
 1;
